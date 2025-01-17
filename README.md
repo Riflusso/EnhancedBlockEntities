@@ -11,7 +11,9 @@ These may include:
 <br/><br/>
 
 **What about animations?** The best part about EBE is that you still get to keep animations, while gaining the performance boost of baked models! Most animated block entity models will only render when absolutely necessary. <br/><br/>
-**Can I use it with Sodium?** Yes you can however, you are **required** to install [Indium](https://modrinth.com/mod/indium) as well. <br/><br/> 
+**Can I use it with Sodium?** Yes.<br/><br/> 
+- EBE 0.10.2 and above are **fully compatible with Sodium 0.6+**
+- Earlier EBE versions require installing [Indium](https://modrinth.com/mod/indium) along with Sodium 0.5.11 or below.
 
 ## Downloading the mod
 
