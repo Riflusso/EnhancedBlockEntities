@@ -39,8 +39,69 @@ Rendering 1700 chests:
 ![After](https://github.com/FoundationGames/EnhancedBlockEntities/raw/116_indev/img/after.png) <br/>
 A 155% frame rate increase!
 
-## Resource Packs
-You can edit EBE's block entity models using resource packs, since they have been converted to conventional .json block models. <br/>
-To view EBE's built-in resources, click on 
-Here's an example of how you can customize chests with resource packs using EBE. <br/><br/>
-![Custom Chest GIF](https://user-images.githubusercontent.com/55095883/112942134-f67fe780-912f-11eb-8b11-cf316544c22b.gif)
+## Is your mod incompatible with EBE?
+If you are the developer of a mod that makes changes to block entity rendering, your mod will be broken by EBE. Fortunately, EBE provides an API that allows you to force-disable its features, allowing your mod to function instead.
+<br/>
+**You don't need to add EBE as a dependency in your development environment either!**
+
+### Add the Entrypoint
+`fabric.mod.json`:
+```json
+{
+    "entrypoints": {
+        "main": [...],
+        "client": [...],
+        "ebe_v1": [
+            "my.mod.compat.EBECompatibility"
+        ]
+    }
+}
+```
+
+### Need to modify config values? Implement `BiConsumer<Properties, Map<String, Text>>`
+`my.mod.compat.EBECompatibility`:
+```java
+public class EBECompatibility implements BiConsumer<Properties, Map<String, Text>>, ... {
+    @Override
+    public void accept(Properties overrideConfigValues, Map<String, Text> overrideReasons) {
+        overrideConfigValues.setProperty("render_enhanced_chests", "false");
+
+        overrideReasons.put("render_enhanced_chests",
+                Text.literal("EBE Enhanced Chests are not compatible with my mod!")
+                        .formatted(Formatting.YELLOW));
+    }
+    
+    ...
+}
+```
+The `accept(Properties, Map<String, Text>)` function is called when EBE loads config values. You can override a desired config value by setting the corresponding property of `overrideConfigValues`. This will also gray out the option in the config menu.
+<br/>
+To explain to users why your mod made that change, you can add a text component to the `overrideReasons` map corresponding to the key of the option you changed.
+<br/>
+`Text` is `net.minecraft.text.Text` when using Yarn mappings.
+
+### Need to manually reload EBE? Implement `Consumer<Runnable>`
+`my.mod.compat.EBECompatibility`:
+```java
+public class EBECompatibility implements Consumer<Runnable>, ... {
+    private static Runnable ebeReloader = () -> {};
+    
+    ...
+
+    @Override
+    public void accept(Runnable ebeConfigReloader) {
+        ebeReloader = ebeConfigReloader;
+    }
+}
+```
+If your mod needs to modify EBE's config values depending on loaded resources, it may encounter load order problems. This can be somewhat fixed by manually reloading EBE.
+<br/>
+The `accept(Runnable)` function is called when EBE is first loaded. The `Runnable` executes `EnhancedBlockEntities.load()`. Store this in a field so you can execute it whenever necessary.
+```java
+void onMyModResourceReload() {
+    EBECompatibility.someParameter = true;
+    EBECompatibility.ebeReloader.run();
+    // Your config modification handler in EBECompatibility can change 
+    // its behavior based on EBECompatibility.someParameter.
+}
+```

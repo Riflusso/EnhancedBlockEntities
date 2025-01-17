@@ -59,6 +59,8 @@
     "option.ebe.dump": "Dump Example Resources",
     "option.ebe.dump.comment": "Dumps the mod's default resources to .minecraft/enhanced_bes_dump/ to be used as an example by resource pack makers.",
 
+    "warning.ebe.overridden": "Overwritten by '%s'",
+
     "screen.ebe.config": "Block Entity Settings",
 
     "text.ebe.apply": "Apply",

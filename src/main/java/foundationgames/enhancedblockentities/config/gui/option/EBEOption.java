@@ -1,24 +1,31 @@
 package foundationgames.enhancedblockentities.config.gui.option;
 
 import foundationgames.enhancedblockentities.ReloadType;
+import foundationgames.enhancedblockentities.config.EBEConfig;
 import foundationgames.enhancedblockentities.util.GuiUtil;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 public final class EBEOption {
     private static final Text NEWLINE = Text.of("\n");
     private static final String OPTION_VALUE = "options.generic_value";
     private static final String DIVIDER = "text.ebe.option_value_division";
+    private static final String OVERRIDDEN = "warning.ebe.overridden";
 
     public final String key;
     public final boolean hasValueComments;
     public final Text comment;
     public final ReloadType reloadType;
     public final TextPalette palette;
+    public final @Nullable EBEConfig.Override override;
 
     private final List<String> values;
     private final int defaultValue;
@@ -27,10 +34,11 @@ public final class EBEOption {
     private Tooltip tooltip = null;
     private Text text = null;
 
-    public EBEOption(String key, List<String> values, int defaultValue, boolean hasValueComments, TextPalette palette, ReloadType reloadType) {
+    public EBEOption(String key, List<String> values, ConfigView config, boolean hasValueComments, TextPalette palette, ReloadType reloadType) {
         this.key = key;
         this.values = values;
-        this.defaultValue = MathHelper.clamp(defaultValue, 0, values.size());
+        this.defaultValue = MathHelper.clamp(values.indexOf(config.configValues.getProperty(key)), 0, values.size());
+        this.override = config.overrides.get(key);
         this.selected = this.defaultValue;
         this.hasValueComments = hasValueComments;
         this.palette = palette;
@@ -62,7 +70,16 @@ public final class EBEOption {
 
     public Tooltip getTooltip() {
         if (tooltip == null) {
-            if (hasValueComments) tooltip = Tooltip.of(Text.translatable(String.format("option.ebe.%s.valueComment.%s", key, getValue())).append(NEWLINE).append(comment.copyContentOnly()));
+            if (override != null) {
+                var text = Text.translatable(OVERRIDDEN, override.modResponsible().getMetadata().getId())
+                        .formatted(Formatting.RED, Formatting.UNDERLINE);
+                if (override.reason() != null) {
+                    text.append(NEWLINE).append(override.reason());
+                }
+
+                tooltip = Tooltip.of(text);
+            }
+            else if (hasValueComments) tooltip = Tooltip.of(Text.translatable(String.format("option.ebe.%s.valueComment.%s", key, getValue())).append(NEWLINE).append(comment.copyContentOnly()));
             else tooltip = Tooltip.of(comment.copyContentOnly());
         }
         return tooltip;
@@ -78,4 +95,6 @@ public final class EBEOption {
     public boolean isDefault() {
         return selected == defaultValue;
     }
+
+    public record ConfigView(Properties configValues, Map<String, EBEConfig.Override> overrides) {}
 }

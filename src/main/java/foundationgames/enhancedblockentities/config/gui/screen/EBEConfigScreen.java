@@ -125,71 +125,72 @@ public class EBEConfigScreen extends Screen {
         Properties config = new Properties();
         EnhancedBlockEntities.CONFIG.writeTo(config);
 
+        final var configView = new EBEOption.ConfigView(config, EnhancedBlockEntities.CONFIG.overrides);
         final var textRenderer = this.client.textRenderer;
 
         optionsWidget.add(new SectionTextWidget(CHEST_OPTIONS_TITLE, textRenderer));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.RENDER_ENHANCED_CHESTS_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.RENDER_ENHANCED_CHESTS_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.RENDER_ENHANCED_CHESTS_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.CHEST_AO_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.CHEST_AO_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.CHEST_AO_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.EXPERIMENTAL_CHESTS_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.EXPERIMENTAL_CHESTS_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.EXPERIMENTAL_CHESTS_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ), option(
-                new EBEOption(EBEConfig.CHRISTMAS_CHESTS_KEY, ALLOWED_FORCED_DISABLED, ALLOWED_FORCED_DISABLED.indexOf(config.getProperty(EBEConfig.CHRISTMAS_CHESTS_KEY)), true, TextPalette.rainbow(0.35f), ReloadType.WORLD)
+                new EBEOption(EBEConfig.CHRISTMAS_CHESTS_KEY, ALLOWED_FORCED_DISABLED, configView, true, TextPalette.rainbow(0.35f), ReloadType.WORLD)
         ));
 
         optionsWidget.add(new SectionTextWidget(SIGN_OPTIONS_TITLE, textRenderer));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.RENDER_ENHANCED_SIGNS_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.RENDER_ENHANCED_SIGNS_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.RENDER_ENHANCED_SIGNS_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.SIGN_TEXT_RENDERING_KEY, SIGN_TEXT_OPTIONS, SIGN_TEXT_OPTIONS.indexOf(config.getProperty(EBEConfig.SIGN_TEXT_RENDERING_KEY)), true, TextPalette.rainbow(0.45f), ReloadType.NONE)
+                new EBEOption(EBEConfig.SIGN_TEXT_RENDERING_KEY, SIGN_TEXT_OPTIONS, configView, true, TextPalette.rainbow(0.45f), ReloadType.NONE)
         ));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.EXPERIMENTAL_SIGNS_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.EXPERIMENTAL_SIGNS_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.EXPERIMENTAL_SIGNS_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ), option(
-                new EBEOption(EBEConfig.SIGN_AO_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.SIGN_AO_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.SIGN_AO_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ));
 
         optionsWidget.add(new SectionTextWidget(BELL_OPTIONS_TITLE, textRenderer));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.RENDER_ENHANCED_BELLS_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.RENDER_ENHANCED_BELLS_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.RENDER_ENHANCED_BELLS_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.BELL_AO_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.BELL_AO_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.BELL_AO_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ));
 
         optionsWidget.add(new SectionTextWidget(BED_OPTIONS_TITLE, textRenderer));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.RENDER_ENHANCED_BEDS_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.RENDER_ENHANCED_BEDS_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.RENDER_ENHANCED_BEDS_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.EXPERIMENTAL_BEDS_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.EXPERIMENTAL_BEDS_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.EXPERIMENTAL_BEDS_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ), option(
-                new EBEOption(EBEConfig.BED_AO_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.BED_AO_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.BED_AO_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ));
 
         optionsWidget.add(new SectionTextWidget(SHULKER_BOX_OPTIONS_TITLE, textRenderer));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.RENDER_ENHANCED_SHULKER_BOXES_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.RENDER_ENHANCED_SHULKER_BOXES_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.RENDER_ENHANCED_SHULKER_BOXES_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.SHULKER_BOX_AO_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.SHULKER_BOX_AO_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.SHULKER_BOX_AO_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ));
 
         optionsWidget.add(new SectionTextWidget(DECORATED_POT_OPTIONS_TITLE, textRenderer));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.RENDER_ENHANCED_DECORATED_POTS_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.RENDER_ENHANCED_DECORATED_POTS_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.RENDER_ENHANCED_DECORATED_POTS_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.DECORATED_POT_AO_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.DECORATED_POT_AO_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.DECORATED_POT_AO_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ));
 
         optionsWidget.add(new SectionTextWidget(ADVANCED_TITLE, textRenderer));
         optionsWidget.add(option(
-                new EBEOption(EBEConfig.FORCE_RESOURCE_PACK_COMPAT_KEY, BOOLEAN_OPTIONS, BOOLEAN_OPTIONS.indexOf(config.getProperty(EBEConfig.FORCE_RESOURCE_PACK_COMPAT_KEY)), false, TextPalette.ON_OFF, ReloadType.RESOURCES)
+                new EBEOption(EBEConfig.FORCE_RESOURCE_PACK_COMPAT_KEY, BOOLEAN_OPTIONS, configView, false, TextPalette.ON_OFF, ReloadType.RESOURCES)
         ));
         optionsWidget.add(ButtonWidget.builder(DUMP_LABEL, b -> {
             try {
@@ -203,10 +204,16 @@ public class EBEConfigScreen extends Screen {
     private ButtonWidget option(EBEOption option) {
         options.add(option);
 
-        return ButtonWidget.builder(option.getText(), b -> {
+        var button = ButtonWidget.builder(option.getText(), b -> {
             option.next();
             b.setMessage(option.getText());
             b.setTooltip(option.getTooltip());
         }).tooltip(option.getTooltip()).build();
+
+        if (option.override != null) {
+            button.active = false;
+        }
+
+        return button;
     }
 }

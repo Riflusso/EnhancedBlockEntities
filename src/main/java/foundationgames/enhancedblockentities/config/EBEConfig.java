@@ -3,11 +3,17 @@ package foundationgames.enhancedblockentities.config;
 import foundationgames.enhancedblockentities.EnhancedBlockEntities;
 import foundationgames.enhancedblockentities.util.ConvUtil;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import java.util.function.BiConsumer;
 
 public class EBEConfig {
     public static final String RENDER_ENHANCED_CHESTS_KEY = "render_enhanced_chests";
@@ -47,6 +53,8 @@ public class EBEConfig {
     public boolean experimentalBeds = true;
     public boolean experimentalSigns = true;
     public boolean forceResourcePackCompat = false;
+
+    public final Map<String, Override> overrides = new HashMap<>();
 
     public void writeTo(Properties properties) {
         properties.setProperty(RENDER_ENHANCED_CHESTS_KEY, Boolean.toString(renderEnhancedChests));
@@ -143,6 +151,32 @@ public class EBEConfig {
             e.printStackTrace();
             return;
         }
+
+        applyCompatConfigModifiers(properties);
+
         readFrom(properties);
     }
+
+    @SuppressWarnings("unchecked")
+    private void applyCompatConfigModifiers(Properties properties) {
+        this.overrides.clear();
+
+        var ebeCompatCfgModifiers = FabricLoader.getInstance()
+                .getEntrypointContainers(EnhancedBlockEntities.API_V1, BiConsumer.class);
+        for (var modifier : ebeCompatCfgModifiers) {
+            var mod = modifier.getProvider();
+            var overrides = new Properties();
+            var reasons = new HashMap<String, Text>();
+            modifier.getEntrypoint().accept(overrides, reasons);
+
+            for (var key : overrides.stringPropertyNames()) {
+                @Nullable Text reason = reasons.get(key);
+                this.overrides.put(key, new Override(mod, reason));
+            }
+
+            properties.putAll(overrides);
+        }
+    }
+
+    public record Override(ModContainer modResponsible, @Nullable Text reason) {}
 }

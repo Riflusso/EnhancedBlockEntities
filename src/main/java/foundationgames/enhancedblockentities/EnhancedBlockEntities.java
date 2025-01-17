@@ -17,6 +17,8 @@ import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.function.Consumer;
+
 public final class EnhancedBlockEntities implements ClientModInitializer {
     public static final String ID = "enhancedblockentities";
     public static final String NAMESPACE = "ebe";
@@ -25,7 +27,10 @@ public final class EnhancedBlockEntities implements ClientModInitializer {
 
     public static final TemplateLoader TEMPLATE_LOADER = new TemplateLoader();
 
+    public static final String API_V1 = "ebe_v1";
+
     @Override
+    @SuppressWarnings("unchecked")
     public void onInitializeClient() {
         FabricLoader.getInstance().getModContainer(ID).ifPresent(mod -> {
             var roots = mod.getRootPaths();
@@ -34,6 +39,11 @@ public final class EnhancedBlockEntities implements ClientModInitializer {
                 TEMPLATE_LOADER.setRoot(roots.get(0).resolve("templates"));
             }
         });
+
+        var ebeCompatInitializers = FabricLoader.getInstance().getEntrypointContainers(API_V1, Consumer.class);
+        for (var init : ebeCompatInitializers) {
+            init.getEntrypoint().accept((Runnable) EnhancedBlockEntities::load);
+        }
 
         WorldRenderEvents.END.register(SignRenderManager::endFrame);
         ClientTickEvents.END_WORLD_TICK.register(WorldUtil.EVENT_LISTENER);
