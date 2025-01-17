@@ -18,7 +18,7 @@ public class DynamicModelProvidingPlugin implements ModelLoadingPlugin, ModelRes
     }
 
     @Override
-    public void onInitializeModelLoader(ModelLoadingPlugin.Context ctx) {
+    public void initialize(ModelLoadingPlugin.Context ctx) {
         ctx.resolveModel().register(this);
     }
 

@@ -16,7 +16,7 @@ public class WorldRendererMixin {
 
     @ModifyVariable(method = "updateChunks",
             at = @At(value = "INVOKE", shift = At.Shift.BEFORE, ordinal = 0, target = "Lnet/minecraft/client/option/SimpleOption;getValue()Ljava/lang/Object;"),
-            index = 7)
+            index = 8)
     private ChunkBuilder.BuiltChunk enhanced_bes$addPostRebuildTask(ChunkBuilder.BuiltChunk chunk) {
         if (WorldUtil.CHUNK_UPDATE_TASKS.size() > 0) {
             var pos = ChunkSectionPos.from(chunk.getOrigin());

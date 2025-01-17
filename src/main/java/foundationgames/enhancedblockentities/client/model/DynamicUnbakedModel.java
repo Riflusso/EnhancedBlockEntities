@@ -9,8 +9,6 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.function.Function;
 
 public class DynamicUnbakedModel implements UnbakedModel {
@@ -25,19 +23,18 @@ public class DynamicUnbakedModel implements UnbakedModel {
     }
 
     @Override
-    public Collection<Identifier> getModelDependencies() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public void setParents(Function<Identifier, UnbakedModel> modelLoader) {
+    public void resolve(Resolver resolver) {
+        for (Identifier modelId : models) {
+            if(modelId == null) continue;
+            resolver.resolve(modelId);
+        }
     }
 
     @Override
     public @Nullable BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer) {
         BakedModel[] baked = new BakedModel[models.length];
         for (int i = 0; i < models.length; i++) {
-            baked[i] = baker.getOrLoadModel(models[i]).bake(baker, textureGetter, rotationContainer);
+            baked[i] = baker.bake(models[i], rotationContainer);
         }
         return new DynamicBakedModel(baked, selector, effects);
     }

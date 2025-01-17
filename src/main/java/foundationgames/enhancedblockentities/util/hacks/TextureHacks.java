@@ -3,8 +3,11 @@ package foundationgames.enhancedblockentities.util.hacks;
 import net.minecraft.client.texture.NativeImage;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.Channels;
+import java.nio.channels.WritableByteChannel;
 import java.util.Optional;
 
 public enum TextureHacks {;
@@ -23,11 +26,19 @@ public enum TextureHacks {;
                 NativeImage prod = new NativeImage(src.getFormat(), sw, sh, false);
                 for (int u = 0; u < sw; u++) {
                     for (int v = 0; v < sh; v++) {
-                        prod.setColor(u, v, src.getColor(x + u, y + v));
+                        prod.setColorArgb(u, v, src.getColorArgb(x + u, y + v));
                     }
                 }
                 src.close();
-                r = prod.getBytes();
+                try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                     WritableByteChannel writableByteChannel = Channels.newChannel(byteArrayOutputStream)) {
+
+                    if (!prod.write(writableByteChannel)) {
+                        throw new IOException("Could not write cropped image to byte array");
+                    }
+
+                    r = byteArrayOutputStream.toByteArray();
+                }
                 prod.close();
             } catch (IllegalArgumentException e) {
                 return Optional.empty();
