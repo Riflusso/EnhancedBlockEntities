@@ -18,7 +18,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(SignEditScreen.class)
 public class SignEditScreenMixin {
     @Inject(method = "renderSignBackground", at = @At("HEAD"), cancellable = true)
-    private void enhanced_bes$renderBakedModelSign(DrawContext context, BlockState state, CallbackInfo ci) {
+    private void enhanced_bes$renderBakedModelSign(DrawContext context, CallbackInfo ci) {
+        BlockState state = ((SignEditScreen) (Object) this).blockEntity.getCachedState();
+
         boolean enhanceSigns = EnhancedBlockEntities.CONFIG.renderEnhancedSigns;
 
         if (!EnhancedBlockEntityRegistry.BLOCKS.contains(state.getBlock())) return;

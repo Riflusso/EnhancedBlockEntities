@@ -37,7 +37,7 @@ public enum EBEUtil {;
     }
 
     public static void renderBakedModel(VertexConsumerProvider vertexConsumers, BlockState state, MatrixStack matrices, BakedModel model, int light, int overlay) {
-        VertexConsumer vertices = vertexConsumers.getBuffer(RenderLayers.getEntityBlockLayer(state, false));
+        VertexConsumer vertices = vertexConsumers.getBuffer(RenderLayers.getEntityBlockLayer(state));
         for (int i = 0; i <= 6; i++) {
             for (BakedQuad q : model.getQuads(null, ModelHelper.faceFromIndex(i), dummy)) {
                 vertices.quad(matrices.peek(), q, 1, 1, 1, 1, light, overlay);

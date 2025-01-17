@@ -31,9 +31,9 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.7.4",
+    "fabricloader": ">=0.16.7",
     "fabric-api": "*",
-    "minecraft": ">=1.21"
+    "minecraft": ">=1.21.2"
   },
   "breaks": {
     "optifabric": "*"

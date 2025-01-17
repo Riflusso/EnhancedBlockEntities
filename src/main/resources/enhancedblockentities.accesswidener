@@ -2,3 +2,5 @@ accessWidener   v2      named
 
 accessible      class   net/minecraft/client/option/SimpleOption$Callbacks
 accessible      class   net/minecraft/client/render/model/BakedModelManager$BakingResult
+accessible      field   net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen blockEntity Lnet/minecraft/block/entity/SignBlockEntity;
+accessible      method  net/minecraft/client/texture/NativeImage write (Ljava/nio/channels/WritableByteChannel;)Z
