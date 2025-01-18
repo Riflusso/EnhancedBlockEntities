@@ -37,7 +37,7 @@ public class ChestBlockEntityRendererOverride extends BlockEntityRendererOverrid
             LidOpenable chest = getLidAnimationHolder(blockEntity, tickDelta);
             matrices.translate(0.5f, 0, 0.5f);
             Direction dir = blockEntity.getCachedState().get(ChestBlock.FACING);
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180 - dir.asRotation()));
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180 - EBEUtil.angle(dir)));
             matrices.translate(-0.5f, 0, -0.5f);
             float yPiv = 9f / 16;
             float zPiv = 15f / 16;

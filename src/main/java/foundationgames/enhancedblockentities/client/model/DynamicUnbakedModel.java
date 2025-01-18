@@ -3,13 +3,11 @@ package foundationgames.enhancedblockentities.client.model;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.Baker;
 import net.minecraft.client.render.model.ModelBakeSettings;
+import net.minecraft.client.render.model.ModelTextures;
 import net.minecraft.client.render.model.UnbakedModel;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Function;
 
 public class DynamicUnbakedModel implements UnbakedModel {
     private final Identifier[] models;
@@ -31,10 +29,10 @@ public class DynamicUnbakedModel implements UnbakedModel {
     }
 
     @Override
-    public @Nullable BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer) {
+    public @Nullable BakedModel bake(ModelTextures textures, Baker baker, ModelBakeSettings settings, boolean ambientOcclusion, boolean isSideLit, ModelTransformation transformation) {
         BakedModel[] baked = new BakedModel[models.length];
         for (int i = 0; i < models.length; i++) {
-            baked[i] = baker.bake(models[i], rotationContainer);
+            baked[i] = baker.bake(models[i], settings);
         }
         return new DynamicBakedModel(baked, selector, effects);
     }

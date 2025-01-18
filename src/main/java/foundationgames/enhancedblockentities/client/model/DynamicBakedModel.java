@@ -1,18 +1,15 @@
 package foundationgames.enhancedblockentities.client.model;
 
-import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
+import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ModelHelper;
-import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
-import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
@@ -20,6 +17,7 @@ import net.minecraft.world.BlockRenderView;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class DynamicBakedModel implements BakedModel, FabricBakedModel {
@@ -45,14 +43,13 @@ public class DynamicBakedModel implements BakedModel, FabricBakedModel {
     }
 
     @Override
-    public void emitBlockQuads(BlockRenderView view, BlockState state, BlockPos blockPos, Supplier<Random> rng, RenderContext context) {
-        QuadEmitter emitter = context.getEmitter();
+    public void emitBlockQuads(QuadEmitter emitter, BlockRenderView view, BlockState state, BlockPos pos, Supplier<Random> rng, Predicate<@Nullable Direction> cullTest) {
         RenderMaterial mat = null;
 
         var indices = this.activeModelIndices.get();
         var models = this.displayedModels.get();
 
-        getSelector().writeModelIndices(view, state, blockPos, rng, context, indices);
+        getSelector().writeModelIndices(view, state, pos, rng, indices);
         for (int i = 0; i < indices.length; i++) {
             int modelIndex = indices[i];
 
@@ -63,9 +60,9 @@ public class DynamicBakedModel implements BakedModel, FabricBakedModel {
             }
         }
 
-        var renderer = RendererAccess.INSTANCE.getRenderer();
+        var renderer = Renderer.get();
         if (renderer != null) {
-            mat = renderer.materialById(RenderMaterial.MATERIAL_STANDARD);
+            mat = renderer.materialById(RenderMaterial.STANDARD_ID);
         }
 
         for (int i = 0; i <= 6; i++) {
@@ -77,11 +74,6 @@ public class DynamicBakedModel implements BakedModel, FabricBakedModel {
                 }
             }
         }
-    }
-
-    @Override
-    public void emitItemQuads(ItemStack itemStack, Supplier<Random> supplier, RenderContext renderContext) {
-        // no
     }
 
     @Override
@@ -105,22 +97,12 @@ public class DynamicBakedModel implements BakedModel, FabricBakedModel {
     }
 
     @Override
-    public boolean isBuiltin() {
-        return false;
-    }
-
-    @Override
     public Sprite getParticleSprite() {
         return models[getSelector().getParticleModelIndex()].getParticleSprite();
     }
 
     @Override
     public ModelTransformation getTransformation() {
-        return null;
-    }
-
-    @Override
-    public ModelOverrideList getOverrides() {
         return null;
     }
 

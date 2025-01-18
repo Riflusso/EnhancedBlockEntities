@@ -61,7 +61,7 @@ public class DecoratedPotBlockEntityRendererOverride extends BlockEntityRenderer
             var dir = pot.getHorizontalFacing();
 
             matrices.translate(0.5f, 0, 0.5f);
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180 - dir.asRotation()));
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180 - EBEUtil.angle(dir)));
             matrices.translate(-0.5f, 0, -0.5f);
 
             var wobbleType = pot.lastWobbleType;

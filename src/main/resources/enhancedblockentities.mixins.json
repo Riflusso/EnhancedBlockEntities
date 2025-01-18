@@ -8,7 +8,6 @@
     "BellBlockEntityMixin",
     "BlockEntityRenderDispatcherMixin",
     "BuiltChunkMixin",
-    "BuiltinModelItemRendererMixin",
     "ChestBlockEntityMixin",
     "DecoratedPotBlockEntityMixin",
     "EnderChestBlockEntityMixin",

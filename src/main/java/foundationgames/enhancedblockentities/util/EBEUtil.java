@@ -36,6 +36,11 @@ public enum EBEUtil {;
         HORIZONTAL_DIRECTIONS = new Direction[] {Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
     }
 
+    public static int angle(Direction dir) {
+        int h = dir.getHorizontalQuarterTurns();
+        return h >= 0 ? h * 90 : 0;
+    }
+
     public static void renderBakedModel(VertexConsumerProvider vertexConsumers, BlockState state, MatrixStack matrices, BakedModel model, int light, int overlay) {
         VertexConsumer vertices = vertexConsumers.getBuffer(RenderLayers.getEntityBlockLayer(state));
         for (int i = 0; i <= 6; i++) {

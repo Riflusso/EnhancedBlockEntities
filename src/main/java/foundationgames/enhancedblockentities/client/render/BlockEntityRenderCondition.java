@@ -2,7 +2,7 @@ package foundationgames.enhancedblockentities.client.render;
 
 import foundationgames.enhancedblockentities.EnhancedBlockEntities;
 import foundationgames.enhancedblockentities.config.EBEConfig;
-import foundationgames.enhancedblockentities.mixin.SignBlockEntityRenderAccessor;
+import foundationgames.enhancedblockentities.mixin.AbstractSignBlockEntityRenderAccessor;
 import foundationgames.enhancedblockentities.util.duck.AppearanceStateHolder;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
@@ -33,7 +33,7 @@ public interface BlockEntityRenderCondition {
             SignRenderManager.renderedSigns++;
             return playerDistance < 80 + Math.max(0, 580 - (SignRenderManager.getRenderedSignAmount() * 0.7));
         }
-        double dist = SignBlockEntityRenderAccessor.enhanced_bes$getRenderDistance();
+        double dist = AbstractSignBlockEntityRenderAccessor.enhanced_bes$getRenderDistance();
         Vec3d blockPos = Vec3d.ofCenter(entity.getPos());
         Vec3d playerPos = MinecraftClient.getInstance().player.getPos();
         if (config.signTextRendering.equals("most")) {

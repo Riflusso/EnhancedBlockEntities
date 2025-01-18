@@ -55,8 +55,8 @@ public enum EBESetup {;
         ResourceUtil.addDoubleChestModels("christmas_left", "christmas_right","christmas_chest", p);
         ResourceUtil.addSingleChestModels("ender", "ender_chest", p);
 
-        ResourceUtil.addChestItemModel(Identifier.of("models/item/chest.json"), "chest_center", p);
-        ResourceUtil.addChestItemModel(Identifier.of("models/item/trapped_chest.json"), "trapped_chest_center", p);
+        ResourceUtil.addChestItemDefinition("chest", "chest_center", p);
+        ResourceUtil.addChestItemDefinition("trapped_chest", "trapped_chest_center", p);
         ResourceUtil.addParentModel("block/ender_chest_center", Identifier.of("item/ender_chest"), p);
 
         p.addDirBlockSprites("entity/chest", "entity/chest/");

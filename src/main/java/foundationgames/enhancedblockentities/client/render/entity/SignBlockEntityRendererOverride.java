@@ -1,6 +1,7 @@
 package foundationgames.enhancedblockentities.client.render.entity;
 
 import foundationgames.enhancedblockentities.client.render.BlockEntityRendererOverride;
+import foundationgames.enhancedblockentities.mixin.AbstractSignBlockEntityRenderAccessor;
 import foundationgames.enhancedblockentities.mixin.SignBlockEntityRenderAccessor;
 import net.minecraft.block.AbstractSignBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -14,13 +15,14 @@ public class SignBlockEntityRendererOverride extends BlockEntityRendererOverride
 
     @Override
     public void render(BlockEntityRenderer<BlockEntity> renderer, BlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-         if (blockEntity instanceof SignBlockEntity entity) {
+        if (blockEntity instanceof SignBlockEntity entity) {
             var state = entity.getCachedState();
             AbstractSignBlock block = (AbstractSignBlock) state.getBlock();
-            var textRenderer = (SignBlockEntityRenderAccessor) renderer;
-            textRenderer.enhanced_bes$setAngles(matrices, -block.getRotationDegrees(state), state);
-            textRenderer.enhanced_bes$renderText(entity.getPos(), entity.getFrontText(), matrices, vertexConsumers, light, entity.getTextLineHeight(), entity.getMaxTextWidth(), true);
-            textRenderer.enhanced_bes$renderText(entity.getPos(), entity.getBackText(), matrices, vertexConsumers, light, entity.getTextLineHeight(), entity.getMaxTextWidth(), false);
+            var sign = (SignBlockEntityRenderAccessor) renderer;
+            var aSign = (AbstractSignBlockEntityRenderAccessor) renderer;
+            sign.enhanced_bes$applyTransforms(matrices, -block.getRotationDegrees(state), state);
+            aSign.enhanced_bes$renderText(entity.getPos(), entity.getFrontText(), matrices, vertexConsumers, light, entity.getTextLineHeight(), entity.getMaxTextWidth(), true);
+            aSign.enhanced_bes$renderText(entity.getPos(), entity.getBackText(), matrices, vertexConsumers, light, entity.getTextLineHeight(), entity.getMaxTextWidth(), false);
         }
     }
 }

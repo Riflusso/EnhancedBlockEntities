@@ -26,8 +26,20 @@ public enum ResourceUtil {;
     private static EBEPack BASE_PACK;
     private static EBEPack TOP_LEVEL_PACK;
 
-    public static void addChestItemModel(Identifier id, String centerChest, EBEPack pack) {
-        pack.addTemplateResource(id, t -> t.load("chest_item_model.json", d -> d.def("chest", centerChest)));
+    public static void addChestItemDefinition(String chestName, String centerChest, EBEPack pack) {
+        pack.addTemplateResource(Identifier.of("items/"+chestName+".json"),
+                t -> t.load("item/chest_item.json", d -> d.def("chest", centerChest)));
+    }
+
+    public static void addBedItemDefinition(String bedColor, EBEPack pack) {
+        pack.addTemplateResource(Identifier.of("items/"+bedColor+"_bed.json"),
+                t -> t.load("item/bed.json",
+                        d -> d.def("head", bedColor + "_bed_head").def("foot", bedColor + "_bed_foot")));
+
+        pack.addTemplateResource(Identifier.of("models/item/"+bedColor+"_bed_head.json"),
+                t -> t.load("model/bed_head_item.json", d -> d.def("bed", bedColor)));
+        pack.addTemplateResource(Identifier.of("models/item/"+bedColor+"_bed_foot.json"),
+                t -> t.load("model/bed_foot_item.json", d -> d.def("bed", bedColor)));
     }
 
     private static String list(String ... els) {
@@ -224,7 +236,7 @@ public enum ResourceUtil {;
                 t -> {
                     var vars = new DelimitedAppender(",");
                     for (Direction dir : EBEUtil.HORIZONTAL_DIRECTIONS) {
-                        int rot = (int)dir.asRotation() + 90;
+                        int rot = EBEUtil.angle(dir) + 90;
                         vars
                                 .append(variantY(t, "attachment=double_wall,facing="+dir.getName(), "builtin:bell_between_walls", rot))
                                 .append(variantY(t, "attachment=ceiling,facing="+dir.getName(), "builtin:bell_ceiling", rot + 90)) // adding 90 here and below to maintain Parity with vanilla's weird choice of rotations
@@ -244,6 +256,8 @@ public enum ResourceUtil {;
         addParentTexModel(bedAOSuffix("block/template_bed_foot"),
                 bedParticle(color) + kv("bed", "entity/bed/" + color),
                 Identifier.of("block/" + color + "_bed_foot"), pack);
+
+        addBedItemDefinition(color, pack);
     }
 
     public static void addBedBlockState(DyeColor bedColor, EBEPack pack) {
@@ -252,7 +266,7 @@ public enum ResourceUtil {;
                 t -> {
                     var vars = new DelimitedAppender(",");
                     for (Direction dir : EBEUtil.HORIZONTAL_DIRECTIONS) {
-                        int rot = (int)dir.asRotation() + 180;
+                        int rot = EBEUtil.angle(dir) + 180;
                         vars
                                 .append(variantY(t, "part=head,facing="+dir.getName(), "block/" + bedColor + "_bed_head", rot))
                                 .append(variantY(t, "part=foot,facing="+dir.getName(), "block/" + bedColor + "_bed_foot", rot));
@@ -290,7 +304,7 @@ public enum ResourceUtil {;
                             .append(variant(t, "facing=up", "builtin:"+shulkerBoxStr))
                             .append(variantXY(t, "facing=down", "builtin:"+shulkerBoxStr, 180, 0));
                     for (Direction dir : EBEUtil.HORIZONTAL_DIRECTIONS) {
-                        int rot = (int)dir.asRotation() + 180;
+                        int rot = EBEUtil.angle(dir) + 180;
                         vars.append(variantXY(t, "facing="+dir.getName(), "builtin:"+shulkerBoxStr, 90, rot));
                     }
                     return vars.get();

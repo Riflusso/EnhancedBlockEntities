@@ -1,6 +1,5 @@
 package foundationgames.enhancedblockentities.client.resource;
 
-import com.google.gson.JsonObject;
 import foundationgames.enhancedblockentities.client.resource.template.TemplateLoader;
 import foundationgames.enhancedblockentities.client.resource.template.TemplateProvider;
 import net.minecraft.SharedConstants;
@@ -12,7 +11,9 @@ import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourcePackInfo;
 import net.minecraft.resource.ResourcePackSource;
 import net.minecraft.resource.ResourceType;
-import net.minecraft.resource.metadata.ResourceMetadataReader;
+import net.minecraft.resource.metadata.PackResourceMetadata;
+import net.minecraft.resource.metadata.ResourceMetadataMap;
+import net.minecraft.resource.metadata.ResourceMetadataSerializer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -39,15 +40,16 @@ public class EBEPack implements ResourcePack {
 
     private final TemplateLoader templates;
 
-    private final JsonObject packMeta;
+    private final PackResourceMetadata packMeta;
     private final ResourcePackInfo packInfo;
 
     public EBEPack(Identifier id, TemplateLoader templates) {
         this.templates = templates;
 
-        this.packMeta = new JsonObject();
-        this.packMeta.addProperty("pack_format", SharedConstants.getGameVersion().getResourceVersion(ResourceType.CLIENT_RESOURCES));
-        this.packMeta.addProperty("description", "Enhanced Block Entities Resources");
+        this.packMeta = new PackResourceMetadata(
+                Text.literal("Enhanced Block Entities Resources"),
+                SharedConstants.getGameVersion().getResourceVersion(ResourceType.CLIENT_RESOURCES),
+                Optional.empty());
 
         this.packInfo = new ResourcePackInfo(id.toString(), Text.literal(id.toString()), ResourcePackSource.BUILTIN, Optional.empty());
     }
@@ -125,12 +127,8 @@ public class EBEPack implements ResourcePack {
 
     @Nullable
     @Override
-    public <T> T parseMetadata(ResourceMetadataReader<T> meta) throws IOException {
-        if ("pack".equals(meta.getKey())) {
-            return meta.fromJson(this.packMeta);
-        }
-
-        return null;
+    public <T> T parseMetadata(ResourceMetadataSerializer<T> meta) {
+        return ResourceMetadataMap.of(PackResourceMetadata.SERIALIZER, this.packMeta).get(meta);
     }
 
     @Override

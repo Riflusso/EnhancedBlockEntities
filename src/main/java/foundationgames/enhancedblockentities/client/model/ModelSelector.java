@@ -2,12 +2,10 @@ package foundationgames.enhancedblockentities.client.model;
 
 import foundationgames.enhancedblockentities.util.DateUtil;
 import foundationgames.enhancedblockentities.util.duck.AppearanceStateHolder;
-import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +16,7 @@ public abstract class ModelSelector {
 
     public static final ModelSelector STATE_HOLDER_SELECTOR = new ModelSelector() {
         @Override
-        public void writeModelIndices(BlockRenderView view, BlockState state, BlockPos pos, Supplier<Random> rand, @Nullable RenderContext ctx, int[] indices) {
+        public void writeModelIndices(BlockRenderView view, BlockState state, BlockPos pos, Supplier<Random> rand, int[] indices) {
             if (view.getBlockEntity(pos) instanceof AppearanceStateHolder stateHolder) {
                 indices[0] = stateHolder.getModelState();
                 return;
@@ -36,7 +34,7 @@ public abstract class ModelSelector {
         }
 
         @Override
-        public void writeModelIndices(BlockRenderView view, BlockState state, BlockPos pos, Supplier<Random> rand, @Nullable RenderContext ctx, int[] indices) {
+        public void writeModelIndices(BlockRenderView view, BlockState state, BlockPos pos, Supplier<Random> rand, int[] indices) {
             if (view.getBlockEntity(pos) instanceof AppearanceStateHolder stateHolder) {
                 indices[0] = stateHolder.getModelState() + this.getParticleModelIndex();
                 return;
@@ -53,7 +51,7 @@ public abstract class ModelSelector {
         return 0;
     }
 
-    public abstract void writeModelIndices(BlockRenderView view, BlockState state, BlockPos pos, Supplier<Random> rand, @Nullable RenderContext ctx, int[] indices);
+    public abstract void writeModelIndices(BlockRenderView view, BlockState state, BlockPos pos, Supplier<Random> rand, int[] indices);
 
     public final int id;
     public final int displayedModelCount;

@@ -1,10 +1,10 @@
 package foundationgames.enhancedblockentities;
 
 import foundationgames.enhancedblockentities.client.model.ModelIdentifiers;
+import foundationgames.enhancedblockentities.client.model.item.EBEIsChristmasProperty;
 import foundationgames.enhancedblockentities.client.render.SignRenderManager;
 import foundationgames.enhancedblockentities.client.resource.template.TemplateLoader;
 import foundationgames.enhancedblockentities.config.EBEConfig;
-import foundationgames.enhancedblockentities.util.DateUtil;
 import foundationgames.enhancedblockentities.util.EBEUtil;
 import foundationgames.enhancedblockentities.util.ResourceUtil;
 import foundationgames.enhancedblockentities.util.WorldUtil;
@@ -13,7 +13,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.item.ModelPredicateProviderRegistry;
+import net.minecraft.client.render.item.property.bool.BooleanProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -45,12 +45,13 @@ public final class EnhancedBlockEntities implements ClientModInitializer {
             init.getEntrypoint().accept((Runnable) EnhancedBlockEntities::load);
         }
 
+        BooleanProperties.ID_MAPPER.put(EBEUtil.id("ebe_is_christmas"), EBEIsChristmasProperty.CODEC);
+
         WorldRenderEvents.END.register(SignRenderManager::endFrame);
         ClientTickEvents.END_WORLD_TICK.register(WorldUtil.EVENT_LISTENER);
 
         ModelIdentifiers.init();
         EBESetup.setupResourceProviders();
-        ModelPredicateProviderRegistry.register(EBEUtil.id("is_christmas"), (stack, world, entity, seed) -> DateUtil.isChristmas() ? 1 : 0);
 
         load();
     }
