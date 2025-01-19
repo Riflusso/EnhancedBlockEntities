@@ -15,7 +15,6 @@
     "LifecycledResourceManagerImplMixin",
     "MinecraftClientMixin",
     "ShulkerBoxBlockEntityMixin",
-    "SignBlockEntityRenderAccessor",
     "SignEditScreenMixin",
     "VideoOptionsScreenMixin",
     "WorldRendererMixin",
