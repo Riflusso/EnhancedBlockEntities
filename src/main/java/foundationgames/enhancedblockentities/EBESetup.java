@@ -57,7 +57,7 @@ public enum EBESetup {;
 
         ResourceUtil.addChestItemDefinition("chest", "chest_center", p);
         ResourceUtil.addChestItemDefinition("trapped_chest", "trapped_chest_center", p);
-        ResourceUtil.addParentModel("block/ender_chest_center", Identifier.of("item/ender_chest"), p);
+        ResourceUtil.addChestItemDefinition("ender_chest", "ender_chest_center", p);
 
         p.addDirBlockSprites("entity/chest", "entity/chest/");
     }
